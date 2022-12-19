@@ -1,4 +1,4 @@
-import { QueryClient } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
 
