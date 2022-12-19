@@ -12,7 +12,7 @@ export default function Home() {
     ["getData"],
     () =>
       globalService
-        .getDataByPeriod("2022-12-10", "2022-12-13")
+        .getDataByPeriod("2020-12-10", "2022-12-13")
         .then((raw): TransactionColumn[] =>
           raw.map((t) => ({
             id: t.id,
