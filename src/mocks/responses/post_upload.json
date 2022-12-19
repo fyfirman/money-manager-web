@@ -1,9 +1,0 @@
-{
-  "status": 200,
-  "error": false,
-  "message": "File uploaded successfully",
-  "data": {
-    "image_id": 2,
-    "image_path": "/images/1670973727.png"
-  }
-}

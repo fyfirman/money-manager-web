@@ -1,0 +1,24 @@
+{
+  "summary": {
+    "startDate": "2022-11-25",
+    "endDate": "2022-12-24",
+    "income": "0",
+    "outcome": "6104297",
+    "cash": "2601458",
+    "card": "3502839",
+    "etcExpenseOpt": false,
+    "etcExpense": "0",
+    "sum": "-6104297"
+  },
+  "income": [],
+  "outcome": [
+    { "mcname": "🏡 Rumah Tangga", "mcSum": "2165504", "budget": "2250000" },
+    { "mcname": "🍱 Food", "mcSum": "1575190", "budget": "2000000" },
+    { "mcname": "🥳 Entertainment", "mcSum": "808364", "budget": "500000" },
+    { "mcname": "🎁 Gift", "mcSum": "523300", "budget": "0" },
+    { "mcname": "♥️ Health", "mcSum": "500000", "budget": "0" },
+    { "mcname": "🚖 Transport", "mcSum": "391500", "budget": "0" },
+    { "mcname": "🧾 Subscription", "mcSum": "135439", "budget": "0" },
+    { "mcname": "Other", "mcSum": "5000", "budget": "0" }
+  ]
+}

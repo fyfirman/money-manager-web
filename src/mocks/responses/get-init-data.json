@@ -1,0 +1,166 @@
+{
+  "initData": {
+    "initStartDate": "2022-11-25",
+    "initEndDate": "2022-12-24",
+    "mbid": "1",
+    "mbName": "Money Manager"
+  },
+  "multiBooks": [{ "mbid": "1", "mbname": "Money Manager", "baseDate": "25" }],
+  "category_1": [
+    {
+      "mcid": "6",
+      "mcname": "🍱 Food",
+      "mcsc": [
+        { "mcscid": "18", "mcscname": "Makan berat 🍛" },
+        { "mcscid": "70", "mcscname": "Jajan 🍟" },
+        { "mcscid": "71", "mcscname": "Belanja 🛒" },
+        { "mcscid": "74", "mcscname": "Sarapan 🥪" },
+        { "mcscid": "69", "mcscname": "Minuman 🥤" }
+      ]
+    },
+    {
+      "mcid": "7",
+      "mcname": "🥳 Entertainment",
+      "mcsc": [
+        { "mcscid": "22", "mcscname": "Friend" },
+        { "mcscid": "23", "mcscname": "Fellowship" },
+        { "mcscid": "24", "mcscname": "Alumni" },
+        { "mcscid": "25", "mcscname": "Dues" },
+        { "mcscid": "75", "mcscname": "Account/Member" },
+        { "mcscid": "E4E70A3B-F656-4B0C-9E2F-517215476328", "mcscname": "👩‍❤️‍👨 Date" }
+      ]
+    },
+    {
+      "mcid": "9",
+      "mcname": "🚖 Transport",
+      "mcsc": [
+        { "mcscid": "72", "mcscname": "Bensin🛵" },
+        { "mcscid": "73", "mcscname": "Parkir🅿️" },
+        {
+          "mcscid": "E50239CF-3A44-48CC-8CBB-528AA8482B49",
+          "mcscname": "Long Transport🚅🚎"
+        },
+        {
+          "mcscid": "506F8F7D-2939-49ED-8C41-B5D419BA1073",
+          "mcscname": "Ojek Online🚙🏍"
+        },
+        { "mcscid": "A9062A84-D2F7-4256-860F-56F2C2293016", "mcscname": "TJ🚌" },
+        { "mcscid": "327C9485-BDB8-4B63-80F7-EEA5DDF017BC", "mcscname": "KRL🚃" }
+      ]
+    },
+    {
+      "mcid": "11",
+      "mcname": "🏡 Rumah Tangga",
+      "mcsc": [
+        { "mcscid": "35", "mcscname": "Furniture💺" },
+        { "mcscid": "1F702391-E3D8-4847-A6B9-4A7DA10E8E93", "mcscname": "Laundry👕" },
+        { "mcscid": "37", "mcscname": "Barang Toilet🧻" },
+        { "mcscid": "FA86DB96-E735-4126-A97F-B0C8BC7C1EB5", "mcscname": "Kosan 🏠" },
+        { "mcscid": "9CBA4AE9-A267-4599-B54B-C2BCE06B4BEB", "mcscname": "Listrik ⚡️" },
+        { "mcscid": "77B3A410-BE79-481B-A380-56A3949951A8", "mcscname": "Dapur 🔪" },
+        { "mcscid": "34", "mcscname": "Other" }
+      ]
+    },
+    { "mcid": "16", "mcname": "🎁 Gift", "mcsc": [] },
+    { "mcid": "63", "mcname": "🌐 Pulsa/Internet", "mcsc": [] },
+    { "mcid": "61", "mcname": "👠 Fashion", "mcsc": [] },
+    {
+      "mcid": "925C04F3-C15C-4F42-8400-7B3A2CE724CE",
+      "mcname": "🧾 Subscription",
+      "mcsc": []
+    },
+    {
+      "mcid": "006DF9CA-E013-4AE9-91A8-A244A6855F63",
+      "mcname": "👨🏻‍💻 Tech",
+      "mcsc": [
+        { "mcscid": "FFF5664E-0219-4623-B7E7-55036788FA9A", "mcscname": "🖥 Setup" },
+        { "mcscid": "19AB872E-E192-47D8-9F3C-D1F1DA87B765", "mcscname": "💻 Website" },
+        { "mcscid": "E756DC9C-9691-481E-88AE-E3FFE68B4EAB", "mcscname": "🎧 Accessories" }
+      ]
+    },
+    {
+      "mcid": "14",
+      "mcname": "♥️ Health",
+      "mcsc": [
+        { "mcscid": "47", "mcscname": "Health" },
+        { "mcscid": "48", "mcscname": "🏋️🏻‍♀️ Workout" },
+        { "mcscid": "49", "mcscname": "Hospital" },
+        { "mcscid": "50", "mcscname": "Medicine" },
+        { "mcscid": "E6D1EF3A-A2A7-4AA4-85EC-2A3DA21A3BB4", "mcscname": "😷Masker" }
+      ]
+    },
+    {
+      "mcid": "15",
+      "mcname": "🎓 Education",
+      "mcsc": [
+        { "mcscid": "51", "mcscname": "✍🏻 ATK" },
+        { "mcscid": "52", "mcscname": "📖 Book" },
+        { "mcscid": "54", "mcscname": "🎦 Course" }
+      ]
+    },
+    { "mcid": "55", "mcname": "Event", "mcsc": [] },
+    { "mcid": "57", "mcname": "Hutang", "mcsc": [] },
+    { "mcid": "60", "mcname": "Organisasi", "mcsc": [] },
+    { "mcid": "62", "mcname": "Nitip", "mcsc": [] },
+    { "mcid": "64", "mcname": "Alat-alat", "mcsc": [] },
+    { "mcid": "68", "mcname": "🏥 Medic", "mcsc": [] },
+    { "mcid": "67", "mcname": "Project", "mcsc": [] },
+    { "mcid": "373D43CE-4A90-4B5F-8C6B-60C35E022F85", "mcname": "💸 Fee", "mcsc": [] },
+    { "mcid": "17", "mcname": "Other", "mcsc": [] }
+  ],
+  "category_0": [
+    { "mcid": "3", "mcname": "🤱🏻Uang Bulanan", "mcsc": [] },
+    { "mcid": "4", "mcname": "Bonus", "mcsc": [] },
+    { "mcid": "56", "mcname": "Hutang", "mcsc": [] },
+    { "mcid": "58", "mcname": "💼 Gaji", "mcsc": [] },
+    {
+      "mcid": "A73DBEB3-1737-4029-9DAD-2B5DEB6445C5",
+      "mcname": "🎪 Freelance",
+      "mcsc": []
+    },
+    { "mcid": "59", "mcname": "Saldo Awal", "mcsc": [] },
+    { "mcid": "66", "mcname": "Uang Jajan", "mcsc": [] },
+    { "mcid": "65", "mcname": "Uang Ganti", "mcsc": [] },
+    { "mcid": "5", "mcname": "Other", "mcsc": [] }
+  ],
+  "payType": [
+    { "ptid": "1", "ptname": "Cash" },
+    { "ptid": "4", "ptname": "Gopay" },
+    { "ptid": "7", "ptname": "ShopeePay" },
+    { "ptid": "8", "ptname": "Ovo" },
+    { "ptid": "8858D0D4-77E5-4F30-8D40-957CF89CE882", "ptname": "Starbucks Card" },
+    { "ptid": "9", "ptname": "BCA" },
+    { "ptid": "3", "ptname": "Mandiri" },
+    { "ptid": "0AA90BE3-A144-4BFE-8BB2-4EACF6675CAC", "ptname": "E-Money" },
+    { "ptid": "6", "ptname": "Savings" },
+    { "ptid": "5", "ptname": "Hutang" }
+  ],
+  "inOutText": [["Expenses"], ["Income"]],
+  "assetGroups": [
+    { "assetGroupId": "11", "assetType": "group", "assetName": "Cash" },
+    { "assetGroupId": "1", "assetType": "group", "assetName": "Accounts" },
+    { "assetGroupId": "3", "assetType": "group", "assetName": "Debit Card" },
+    { "assetGroupId": "4", "assetType": "group", "assetName": "Savings" },
+    { "assetGroupId": "7", "assetType": "group", "assetName": "Others" }
+  ],
+  "assetNames": [
+    { "assetType": "item", "assetId": "1", "assetName": "Cash" },
+    { "assetType": "item", "assetId": "4", "assetName": "Gopay" },
+    { "assetType": "item", "assetId": "7", "assetName": "ShopeePay" },
+    { "assetType": "item", "assetId": "8", "assetName": "Ovo" },
+    {
+      "assetType": "item",
+      "assetId": "8858D0D4-77E5-4F30-8D40-957CF89CE882",
+      "assetName": "Starbucks Card"
+    },
+    { "assetType": "item", "assetId": "9", "assetName": "BCA" },
+    { "assetType": "item", "assetId": "3", "assetName": "Mandiri" },
+    {
+      "assetType": "item",
+      "assetId": "0AA90BE3-A144-4BFE-8BB2-4EACF6675CAC",
+      "assetName": "E-Money"
+    },
+    { "assetType": "item", "assetId": "6", "assetName": "Savings" },
+    { "assetType": "item", "assetId": "5", "assetName": "Hutang" }
+  ]
+}

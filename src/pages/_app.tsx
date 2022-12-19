@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "~/utils/query-client";
 import { theme } from "~/styles/theme";
 import { ConfigProvider, Layout } from "antd";
