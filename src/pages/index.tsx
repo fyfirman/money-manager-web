@@ -1,18 +1,24 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Button, message } from "antd";
+import dayjs from "dayjs";
 import { useState } from "react";
 import AddTransactionDrawer from "~/components/add-transaction-drawer";
 import { TransactionColumn } from "~/components/tables/transaction-columns";
 import TransactionTable from "~/components/tables/transaction-table";
+import { useInitQuery } from "~/hooks/use-init-query";
 import globalService from "~/services/global-service.service";
 
+const previousDate = dayjs().subtract(5, "year");
+
 export default function Home() {
+  useInitQuery();
+
   const { data, isLoading } = useQuery(
     ["getData"],
     () =>
       globalService
-        .getDataByPeriod("2020-12-10", "2022-12-13")
+        .getDataByPeriod(previousDate.format("YYYY-MM-DD"), dayjs().format("YYYY-MM-DD"))
         .then((raw): TransactionColumn[] =>
           raw.map((t) => ({
             id: t.id,

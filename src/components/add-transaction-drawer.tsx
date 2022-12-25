@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   Button,
   Col,
@@ -73,6 +72,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
               rules={[{ required: true, message: "Please choose the date" }]}
             >
               <DatePicker
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion --- disabled due to antd docs example
                 getPopupContainer={(trigger) => trigger.parentElement!}
                 style={{ width: "100%" }}
               />

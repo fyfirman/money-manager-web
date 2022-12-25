@@ -25,7 +25,7 @@ export interface IncomeCategory {
 export interface ExpenseCategory {
   mcid: string;
   mcname: string;
-  mcsc: any[];
+  mcsc: Mcsc[];
 }
 
 export interface PayType {
