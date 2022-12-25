@@ -15,14 +15,26 @@ export interface Category {
 
 export interface CategoryState {
   categories: Category[];
+  getSubCategories(id: Category["id"]): Category["children"];
 }
 
-const initState: CategoryState = {
-  categories: [],
-};
-
 export const useCategoryStore = create<CategoryState>()(
-  devtools(() => initState, {
-    name: "Category",
-  }),
+  devtools(
+    (set, get) => ({
+      categories: [] as Category[],
+      getSubCategories(id) {
+        const { categories } = get();
+        const result = categories.find((subCategory) => subCategory.id === id);
+
+        if (!result) {
+          return [];
+        }
+
+        return result.children;
+      },
+    }),
+    {
+      name: "Category",
+    },
+  ),
 );

@@ -15,6 +15,8 @@ import {
 import dayjs from "dayjs";
 import { useMutation } from "@tanstack/react-query";
 import globalService, { InOutType } from "~/services/global-service.service";
+import { CategoryType, useCategoryStore } from "~/stores/category.store";
+import { useAccountStore } from "~/stores/account.store";
 
 type AddTransactionDrawerProps = DrawerProps;
 
@@ -30,6 +32,11 @@ export interface AddNewTransactionForm {
 
 const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
   const { onClose, ...rest } = props;
+
+  const accounts = useAccountStore((state) => state.accounts);
+  const expenseCategories = useCategoryStore((state) =>
+    state.categories.filter((c) => c.type === CategoryType.Expense),
+  );
 
   const mutation = useMutation(["transaction"], globalService.postCreateTransaction, {
     onError(err) {
@@ -88,10 +95,10 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
             >
               <Select
                 allowClear
-                options={[
-                  { label: "test", value: "test 12xxa3" },
-                  { label: "test", value: "test s123xx" },
-                ]}
+                options={accounts.map((a) => ({
+                  label: a.name,
+                  value: a.id,
+                }))}
                 placeholder="Please choose the account"
               />
             </Form.Item>
@@ -109,10 +116,11 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
                 filterOption={(input, option) =>
                   (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
                 }
-                options={[
-                  { label: "test", value: "test 123" },
-                  { label: "xxx", value: "test 1223" },
-                ]}
+                onChange={() => form.setFieldValue("subCategory", undefined)}
+                options={expenseCategories.map((c) => ({
+                  label: c.name,
+                  value: c.id,
+                }))}
                 placeholder="Please choose the category"
                 showSearch
               />
@@ -127,23 +135,45 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
                 prevValues.category !== currentValues.category
               }
             >
-              {({ getFieldValue }) => (
-                <Form.Item
-                  label="Sub-Category"
-                  name="subCategory"
-                  rules={[{ required: true, message: "Please choose the sub-category" }]}
-                >
-                  <Select
-                    allowClear
-                    disabled={!getFieldValue("category")}
-                    options={[
-                      { label: "test", value: "test 12s3" },
-                      { label: "test", value: "test 1x23" },
+              {({ getFieldValue }) => {
+                const subCategory = (() => {
+                  if (!getFieldValue("category")) {
+                    return [];
+                  }
+
+                  return useCategoryStore
+                    .getState()
+                    .getSubCategories(getFieldValue("category") as string)
+                    .map((c) => ({
+                      label: c.name,
+                      value: c.id,
+                    }));
+                })();
+
+                return (
+                  <Form.Item
+                    label="Sub-Category"
+                    name="subCategory"
+                    rules={[
+                      {
+                        required: subCategory.length > 0,
+                        message: "Please choose the sub-category",
+                      },
                     ]}
-                    placeholder="Please choose the sub-category"
-                  />
-                </Form.Item>
-              )}
+                  >
+                    <Select
+                      allowClear
+                      disabled={!getFieldValue("category") || subCategory.length === 0}
+                      options={subCategory}
+                      placeholder={
+                        !getFieldValue("category") || subCategory.length > 0
+                          ? "Please choose the sub-category"
+                          : "The category you selected is does not have sub-category"
+                      }
+                    />
+                  </Form.Item>
+                );
+              }}
             </Form.Item>
           </Col>
         </Row>
