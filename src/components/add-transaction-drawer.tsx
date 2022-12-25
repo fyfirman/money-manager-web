@@ -17,6 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 import globalService, { InOutType } from "~/services/global-service.service";
 import { CategoryType, useCategoryStore } from "~/stores/category.store";
 import { useAccountStore } from "~/stores/account.store";
+import { useTransactionStore } from "~/stores/transaction.store";
 
 type AddTransactionDrawerProps = DrawerProps;
 
@@ -37,6 +38,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
   const expenseCategories = useCategoryStore((state) =>
     state.categories.filter((c) => c.type === CategoryType.Expense),
   );
+  const possibleContents = useTransactionStore((state) => state.getListedContent());
 
   const mutation = useMutation(["transaction"], globalService.postCreateTransaction, {
     onError(err) {
@@ -184,7 +186,18 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
               name="content"
               rules={[{ required: true, message: "Please choose the content" }]}
             >
-              <Input placeholder="Please enter content" />
+              <Select
+                allowClear
+                filterOption={(input, option) =>
+                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                }
+                options={possibleContents.map((c) => ({
+                  label: c,
+                  value: c,
+                }))}
+                placeholder="Please choose the content"
+                showSearch
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -193,7 +206,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
             <Form.Item
               label="Amount"
               name="amount"
-              rules={[{ required: true, message: "Please choose the amount" }]}
+              rules={[{ required: true, message: "Please enter amount" }]}
             >
               <InputNumber
                 className="w-full"
