@@ -1,7 +1,7 @@
 import { rest } from "msw";
 import { env } from "~/utils/env-variable";
-import getInitDataResponse from "./responses/get-init-data.json";
 import { getDataByPeriodResponse } from "./responses/get-data-by-period-response";
+import { getInitDataResponse } from "./responses/get-init-data";
 
 export const handlers = [
   // Handles a POST
@@ -17,7 +17,7 @@ export const handlers = [
 
   // Handles a GET
   rest.get(`${env.baseUrl}/getInitData`, (req, res, ctx) => {
-    return res(ctx.json(getInitDataResponse));
+    return res(ctx.text(getInitDataResponse));
   }),
 
   rest.get(`${env.baseUrl}/getDataByPeriod`, (req, res, ctx) => {

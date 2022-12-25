@@ -4,7 +4,9 @@ import { axios } from "~/utils/axios-client";
 import { parseXML } from "~/utils/xml-parser";
 
 const getInitData = async () => {
-  const { data } = await axios.get<InitDataResponse>("/getInitData");
+  const res = await axios.get<string>("/getInitData");
+  // eslint-disable-next-line no-eval --- TODO: Security issue about eval()
+  const data: InitDataResponse = eval(`(${res.data})`);
 
   return data;
 };
