@@ -1,5 +1,6 @@
 import { ColumnsType } from "antd/es/table";
 import { dateSortComparison, stringSortComparison } from "~/helpers/sort-fn";
+import { currencyFormatter } from "~/helpers/string-helper";
 
 export interface TransactionColumn {
   id: string;
@@ -48,6 +49,9 @@ export const transactionColumns: ColumnsType<TransactionColumn> = [
     dataIndex: "amount",
     key: "amount",
     sorter: (a, b) => b.amount - a.amount,
+    render(value) {
+      return currencyFormatter(value as number);
+    },
   },
   {
     title: "Type",
