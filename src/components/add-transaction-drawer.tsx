@@ -14,12 +14,16 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 import { useMutation } from "@tanstack/react-query";
-import globalService, { InOutType } from "~/services/global-service.service";
+import globalService from "~/services/global-service.service";
 import { CategoryType, useCategoryStore } from "~/stores/category.store";
 import { useAccountStore } from "~/stores/account.store";
 import { useTransactionStore } from "~/stores/transaction.store";
+import { InOutType } from "~/services/global-service.schema";
+import { ZodError } from "zod";
 
-type AddTransactionDrawerProps = DrawerProps;
+interface AddTransactionDrawerProps extends DrawerProps {
+  onClose: () => void;
+}
 
 export interface AddNewTransactionForm {
   date: dayjs.Dayjs;
@@ -42,13 +46,17 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
 
   const mutation = useMutation(["transaction"], globalService.postCreateTransaction, {
     onError(err) {
+      if (err instanceof ZodError) {
+        return message.error(`${err.issues[0].path[0]}: ${err.issues[0].message}`);
+      }
       void message.error((err as Error).message);
     },
   });
+
   const [form] = Form.useForm<AddNewTransactionForm>();
 
   const handleFinish = (values: AddNewTransactionForm) => {
-    void mutation.mutateAsync({
+    const body = {
       assetId: 0, // todo
       mbCash: 0, // todo
       mcid: 0, // todo
@@ -60,7 +68,13 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
       mbDate: values.date.toISOString().slice(0, -2),
       payType: values.account,
       mbDetailContent: "",
-    });
+    };
+    mutation.mutate(body);
+
+    void message.success("Transaction has been added successfully");
+
+    form.resetFields();
+    onClose();
   };
 
   return (
@@ -230,7 +244,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
         <Button onClick={() => form.resetFields()}>Reset</Button>
         <Space>
           <Button onClick={onClose}>Cancel</Button>
-          <Button onClick={form.submit} type="primary">
+          <Button loading={mutation.isLoading} onClick={form.submit} type="primary">
             Submit
           </Button>
         </Space>

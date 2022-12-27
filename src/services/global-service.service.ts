@@ -2,6 +2,10 @@ import { InitDataResponse } from "~/interfaces/init-data";
 import { TransactionRaw } from "~/interfaces/transaction-raw";
 import { axios } from "~/utils/axios-client";
 import { parseXML } from "~/utils/xml-parser";
+import {
+  CreateTransactionPayload,
+  createTransactionPayloadSchema,
+} from "./global-service.schema";
 
 const getInitData = async () => {
   const res = await axios.get<string>("/getInitData");
@@ -41,31 +45,12 @@ const getDataByPeriod = async (
   return result;
 };
 
-export enum InOutType {
-  Expense = "Expense",
-  Income = "Income",
-}
-
-export interface CreateTransactionPayload {
-  mbDate: string;
-  mbCash: number;
-  inOutType: InOutType;
-  payType: string;
-  mbCategory: string;
-  subCategory: string;
-  mbContent: string;
-  mbDetailContent?: string;
-  assetId: number | string;
-  mcid: number | string;
-  mcscid: number | string;
-}
-
 const postCreateTransaction = async (payload: CreateTransactionPayload) => {
-  const { data } = axios.post<any>("/create", payload, {
+  createTransactionPayloadSchema.parse(payload);
+
+  void axios.post<unknown>("/create", payload, {
     headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
   });
-
-  return data;
 };
 
 const globalService = {
