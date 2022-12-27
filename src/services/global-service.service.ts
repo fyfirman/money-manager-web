@@ -48,7 +48,7 @@ const getDataByPeriod = async (
 const postCreateTransaction = async (payload: CreateTransactionPayload) => {
   createTransactionPayloadSchema.parse(payload);
 
-  void axios.post<unknown>("/create", payload, {
+  await axios.post<unknown>("/create", payload, {
     headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
   });
 };

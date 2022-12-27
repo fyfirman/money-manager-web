@@ -18,8 +18,9 @@ import globalService from "~/services/global-service.service";
 import { CategoryType, useCategoryStore } from "~/stores/category.store";
 import { useAccountStore } from "~/stores/account.store";
 import { useTransactionStore } from "~/stores/transaction.store";
-import { InOutType } from "~/services/global-service.schema";
+import { CreateTransactionPayload, InOutType } from "~/services/global-service.schema";
 import { ZodError } from "zod";
+import { queryClient } from "~/utils/query-client";
 
 interface AddTransactionDrawerProps extends DrawerProps {
   onClose: () => void;
@@ -44,37 +45,39 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
   );
   const possibleContents = useTransactionStore((state) => state.getListedContent());
 
-  const mutation = useMutation(["transaction"], globalService.postCreateTransaction, {
-    onError(err) {
+  const mutation = useMutation(["transaction"], globalService.postCreateTransaction);
+
+  const [form] = Form.useForm<AddNewTransactionForm>();
+
+  const handleFinish = async (values: AddNewTransactionForm) => {
+    try {
+      const body: CreateTransactionPayload = {
+        mbDate: `${values.date.format("YYYY-MM-DD")}T00:00:00`,
+        mbCash: values.amount,
+        assetId: values.account,
+        inOutType: InOutType.Expense,
+        inOutCode: "1", // 1 for Expense
+        payType: values.account,
+        mbCategory: values.category,
+        subCategory: values.subCategory,
+        mbContent: values.content,
+        mcid: values.category,
+        mcscid: values.subCategory,
+        mbDetailContent: values.description,
+      };
+      await mutation.mutateAsync(body);
+
+      void queryClient.resetQueries(["getTransactions"]);
+      void message.success("Transaction has been added successfully");
+
+      onClose();
+      form.resetFields();
+    } catch (err: unknown) {
       if (err instanceof ZodError) {
         return message.error(`${err.issues[0].path[0]}: ${err.issues[0].message}`);
       }
       void message.error((err as Error).message);
-    },
-  });
-
-  const [form] = Form.useForm<AddNewTransactionForm>();
-
-  const handleFinish = (values: AddNewTransactionForm) => {
-    const body = {
-      assetId: 0, // todo
-      mbCash: 0, // todo
-      mcid: 0, // todo
-      mcscid: 0, // todo
-      inOutType: InOutType.Expense,
-      mbCategory: values.category,
-      subCategory: values.subCategory,
-      mbContent: values.content,
-      mbDate: values.date.toISOString().slice(0, -2),
-      payType: values.account,
-      mbDetailContent: "",
-    };
-    mutation.mutate(body);
-
-    void message.success("Transaction has been added successfully");
-
-    form.resetFields();
-    onClose();
+    }
   };
 
   return (

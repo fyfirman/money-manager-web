@@ -9,6 +9,7 @@ export const createTransactionPayloadSchema = z.object({
   mbDate: z.string(),
   mbCash: z.number(),
   inOutType: z.enum(["Income", "Expense"]),
+  inOutCode: z.enum(["0", "1"]),
   payType: z.string(),
   mbCategory: z.string(),
   subCategory: z.string().optional(),
