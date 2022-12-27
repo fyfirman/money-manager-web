@@ -31,6 +31,9 @@ export default function Home() {
             </Button>
           </div>
         </div>
+        <div>
+          <p>Total data: {data?.length ?? 0}</p>
+        </div>
         <TransactionTable dataSource={data} loading={isLoading} />
       </div>
       <AddTransactionDrawer onClose={onClose} open={open} />
