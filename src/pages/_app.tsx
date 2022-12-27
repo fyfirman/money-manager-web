@@ -31,6 +31,7 @@ function App({ Component, pageProps }: AppProps) {
           </Footer>
         </Layout>
       </ConfigProvider>
+      {process.env.NODE_ENV === "development" ? <ReactQueryDevtools /> : null}
     </QueryClientProvider>
   );
 }
