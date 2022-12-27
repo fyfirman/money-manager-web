@@ -1,16 +1,23 @@
 import create from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 
 interface ConfigState {
   baseUrl: string;
 }
 
 const initState: ConfigState = {
-  baseUrl: "",
+  baseUrl: "http://192.168.1.1:8888",
+};
+
+const persistConfig = {
+  name: "config-storage",
 };
 
 export const useConfigStore = create<ConfigState>()(
-  devtools(() => initState, {
-    name: "Config",
-  }),
+  devtools(
+    persist(() => initState, persistConfig),
+    {
+      name: "Config",
+    },
+  ),
 );

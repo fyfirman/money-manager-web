@@ -4,13 +4,14 @@ import { queryClient } from "~/utils/query-client";
 import { theme } from "~/styles/theme";
 import { ConfigProvider, Layout } from "antd";
 import { env } from "~/utils/env-variable";
-import Logo from "~/assets/logo.png";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import "../styles/globals.css";
 import "~/utils/dayjs";
 import "antd/dist/reset.css";
+import Navbar from "~/components/navbar";
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 
 if (env.enableMock) {
   require("~/mocks/setup");
@@ -21,9 +22,7 @@ function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <ConfigProvider theme={theme}>
         <Layout className="layout">
-          <Header className="!bg-white shadow-md flex justify-center items-center">
-            <img alt="logo" src={Logo.src} />
-          </Header>
+          <Navbar />
           <Content>
             <Component {...pageProps} />
           </Content>
