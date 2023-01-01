@@ -1,0 +1,21 @@
+{
+  "Initialize test for react component": {
+    "prefix": "test",
+    "body": [
+      "import React from 'react';",
+      "import { render, screen, waitFor } from '@testing-library/react';",
+      "import userEvent from '@testing-library/user-event';",
+      "import ${TM_FILENAME_BASE/[.test]//g} from './${TM_FILENAME_BASE/[.test]//g}';",
+      "",
+      "describe('${TM_FILENAME_BASE/[.test]//g}', () => {",
+      "  it('should $1', async () => {",
+      "    render(<${TM_FILENAME_BASE/[.test]//g} />);",
+      "",
+      "    $2",
+      "  });",
+      "});",
+      ""
+    ],
+    "description": "Initialize test for react component"
+  }
+}
