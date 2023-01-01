@@ -1,6 +1,6 @@
 import { InitDataResponse } from "~/interfaces/init-data";
 import { TransactionRaw } from "~/interfaces/transaction-raw";
-import { axios } from "~/utils/axios-client";
+import { axios, getBaseUrl } from "~/utils/axios-client";
 import { parseXML } from "~/utils/xml-parser";
 import {
   CreateTransactionPayload,
@@ -48,8 +48,15 @@ const getDataByPeriod = async (
 const postCreateTransaction = async (payload: CreateTransactionPayload) => {
   createTransactionPayloadSchema.parse(payload);
 
-  await axios.post<unknown>("/create", payload, {
-    headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+  const params = new URLSearchParams();
+  Object.keys(payload).forEach((key) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument --- this code below is not right.
+    params.append(key, (payload as any)[key]);
+  });
+
+  await fetch(`${getBaseUrl()}/create`, {
+    method: "POST",
+    body: params.toString().replaceAll("+", "%20"),
   });
 };
 
