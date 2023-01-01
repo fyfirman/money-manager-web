@@ -1,7 +1,7 @@
 import { ColumnType } from "antd/es/table";
 import { dateSortComparison, stringSortComparison } from "~/helpers/sort-fn";
 import { currencyFormatter } from "~/helpers/string-helper";
-import type { EditableCellParams } from "../editable-cell";
+import ContentSelect from "../transaction-form/content-select";
 import TransactionTableAction from "./transaction-table-action";
 
 export interface TransactionColumn {
@@ -25,6 +25,7 @@ export interface GetTransactionColumnsParams {
 export type TransactionColumnsType = (
   | ColumnType<TransactionColumn> & {
       editable?: boolean;
+      renderEditInput?: (record: TransactionColumn) => React.ReactNode;
     }
 )[];
 
@@ -64,6 +65,7 @@ export const getTransactionColumns = ({
       dataIndex: "content",
       key: "content",
       editable: true,
+      renderEditInput: (record) => <ContentSelect defaultValue={record.content} />,
       sorter: (a, b) => stringSortComparison(a.content, b.content),
     },
     {
@@ -103,15 +105,17 @@ export const getEditableTransactionColumns = (params: GetTransactionColumnsParam
   const columns = getTransactionColumns(params);
 
   return columns.map((col) => {
+    const { renderEditInput = () => {} } = col;
     if (!col.editable) {
       return col;
     }
     return {
       ...col,
-      onCell: (record: TransactionColumn): EditableCellParams<TransactionColumn> => ({
+      onCell: (record: TransactionColumn) => ({
         record,
         dataIndex: col.dataIndex as keyof TransactionColumn,
         editing: params.editingKey === record.id,
+        InputNode: () => renderEditInput(record),
       }),
     };
   });

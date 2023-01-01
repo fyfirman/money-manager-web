@@ -21,6 +21,7 @@ import { useTransactionStore } from "~/stores/transaction.store";
 import { CreateTransactionPayload, InOutType } from "~/services/global-service.schema";
 import { ZodError } from "zod";
 import { queryClient } from "~/utils/query-client";
+import ContentItem from "./transaction-form/content-select";
 
 interface AddTransactionDrawerProps extends DrawerProps {
   onClose: () => void;
@@ -203,18 +204,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
               name="content"
               rules={[{ required: true, message: "Please choose the content" }]}
             >
-              <Select
-                allowClear
-                filterOption={(input, option) =>
-                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-                }
-                options={possibleContents.map((c) => ({
-                  label: c,
-                  value: c,
-                }))}
-                placeholder="Please choose the content"
-                showSearch
-              />
+              <ContentItem />
             </Form.Item>
           </Col>
         </Row>
