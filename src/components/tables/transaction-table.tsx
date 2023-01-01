@@ -6,8 +6,8 @@ import { errorHandler } from "~/helpers/error-handler";
 import globalService from "~/services/global-service.service";
 import { Transaction } from "~/stores/transaction.store";
 import { queryClient } from "~/utils/query-client";
-import { titleCase } from "~/helpers/string-helper";
 import { numWords } from "~/libs/num-words/num-words";
+import { titleCase } from "~/libs/title-case/title-case";
 import { TransactionColumn, transactionColumns } from "./transaction-columns";
 
 const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
