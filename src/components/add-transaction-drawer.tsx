@@ -6,7 +6,6 @@ import {
   DrawerProps,
   Form,
   Input,
-  InputNumber,
   message,
   Row,
   Select,
@@ -17,11 +16,11 @@ import { useMutation } from "@tanstack/react-query";
 import globalService from "~/services/global-service.service";
 import { CategoryType, useCategoryStore } from "~/stores/category.store";
 import { useAccountStore } from "~/stores/account.store";
-import { useTransactionStore } from "~/stores/transaction.store";
 import { CreateTransactionPayload, InOutType } from "~/services/global-service.schema";
 import { ZodError } from "zod";
 import { queryClient } from "~/utils/query-client";
 import ContentItem from "./transaction-form/content-select";
+import AmountInput from "./transaction-form/amount-input";
 
 interface AddTransactionDrawerProps extends DrawerProps {
   onClose: () => void;
@@ -44,7 +43,6 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
   const expenseCategories = useCategoryStore((state) =>
     state.categories.filter((c) => c.type === CategoryType.Expense),
   );
-  const possibleContents = useTransactionStore((state) => state.getListedContent());
 
   const mutation = useMutation(["transaction"], globalService.postCreateTransaction);
 
@@ -215,13 +213,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
               name="amount"
               rules={[{ required: true, message: "Please enter amount" }]}
             >
-              <InputNumber
-                className="w-full"
-                min={0}
-                placeholder="Please enter amount"
-                prefix="Rp."
-                step={1000}
-              />
+              <AmountInput />
             </Form.Item>
           </Col>
         </Row>

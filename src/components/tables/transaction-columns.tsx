@@ -1,6 +1,9 @@
+import { DatePicker } from "antd";
 import { ColumnType } from "antd/es/table";
+import dayjs from "dayjs";
 import { dateSortComparison, stringSortComparison } from "~/helpers/sort-fn";
 import { currencyFormatter } from "~/helpers/string-helper";
+import AmountInput from "../transaction-form/amount-input";
 import ContentSelect from "../transaction-form/content-select";
 import TransactionTableAction from "./transaction-table-action";
 
@@ -40,6 +43,17 @@ export const getTransactionColumns = ({
       title: "Date",
       dataIndex: "date",
       key: "date",
+      editable: true,
+      renderEditInput(record) {
+        return (
+          <DatePicker
+            defaultValue={dayjs(record.date)}
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion --- disabled due to antd docs example
+            getPopupContainer={(trigger) => trigger.parentElement!}
+            style={{ width: "100%" }}
+          />
+        );
+      },
       sorter: (a, b) => dateSortComparison(new Date(a.date), new Date(b.date)),
     },
     {
@@ -73,6 +87,10 @@ export const getTransactionColumns = ({
       dataIndex: "amount",
       key: "amount",
       sorter: (a, b) => b.amount - a.amount,
+      editable: true,
+      renderEditInput(record) {
+        return <AmountInput defaultValue={record.amount} />;
+      },
       render(value) {
         return currencyFormatter(value as number);
       },

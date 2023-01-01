@@ -2,7 +2,7 @@ import { Select } from "antd";
 import { useTransactionStore } from "~/stores/transaction.store";
 
 interface ContentSelectProps {
-  defaultValue: any; // TODO: Replace any with right type
+  defaultValue?: any; // TODO: Replace any with right type
 }
 
 const ContentSelect: React.FC<ContentSelectProps> = ({ defaultValue }) => {
