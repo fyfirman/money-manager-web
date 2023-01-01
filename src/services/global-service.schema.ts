@@ -17,7 +17,7 @@ export const createTransactionPayloadSchema = z.object({
   mbDetailContent: z.string().optional(),
   assetId: z.union([z.number(), z.string()]),
   mcid: z.union([z.number(), z.string()]),
-  mcscid: z.union([z.number(), z.string()]),
+  mcscid: z.union([z.number(), z.string()]).optional(),
 });
 
 export type CreateTransactionPayload = z.infer<typeof createTransactionPayloadSchema>;
