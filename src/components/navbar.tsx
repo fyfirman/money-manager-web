@@ -4,6 +4,7 @@ import { ChangeEventHandler, useState } from "react";
 import Logo from "~/assets/logo.png";
 import { baseUrlRegex } from "~/helpers/regex";
 import { useConfigStore } from "~/stores/config.store";
+import { env } from "~/utils/env-variable";
 
 const { Header } = Layout;
 
@@ -38,12 +39,15 @@ const Navbar: React.FC<NavbarProps> = () => {
       <div className="max-h-[64px] flex gap-1">
         <Input
           className="max-w-[200px]"
-          defaultValue={baseUrl}
+          defaultValue={env.enableMock ? "http://localhost:3000" : baseUrl}
+          disabled={env.enableMock}
           onChange={handleConfigChange}
           placeholder="http://192.168.1.23:8888"
           status={!!error ? "error" : undefined}
         />
-        <Button onClick={handleRefresh}>Refresh</Button>
+        <Button disabled={env.enableMock} onClick={handleRefresh}>
+          Refresh
+        </Button>
       </div>
     </Header>
   );

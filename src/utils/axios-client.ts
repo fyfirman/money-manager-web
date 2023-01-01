@@ -12,9 +12,14 @@ const caseMiddlewareOption = {
   },
 };
 
+export const getBaseUrl = () =>
+  !env.enableMock
+    ? `${useConfigStore.getState().baseUrl}/moneyBook`
+    : "http://localhost:3000";
+
 export const axios = applyCaseMiddleware(
   Axios.create({
-    baseURL: !env.enableMock ? `${useConfigStore.getState().baseUrl}/moneyBook` : "",
+    baseURL: getBaseUrl(),
     headers: {
       "Content-Type": "application/json",
     },
@@ -23,6 +28,6 @@ export const axios = applyCaseMiddleware(
 );
 
 axios.interceptors.request.use((config) => {
-  config.baseURL = `${useConfigStore.getState().baseUrl}/moneyBook`;
+  config.baseURL = getBaseUrl();
   return config;
 });
