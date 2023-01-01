@@ -2,9 +2,11 @@ import { InitDataResponse } from "~/interfaces/init-data";
 import { TransactionRaw } from "~/interfaces/transaction-raw";
 import { axios, getBaseUrl } from "~/utils/axios-client";
 import { parseXML } from "~/utils/xml-parser";
+import { Transaction } from "./../stores/transaction.store";
 import {
   CreateTransactionPayload,
   createTransactionPayloadSchema,
+  deleteTransactionsSchema,
 } from "./global-service.schema";
 
 const getInitData = async () => {
@@ -60,10 +62,26 @@ const postCreateTransaction = async (payload: CreateTransactionPayload) => {
   });
 };
 
+const postDeleteTransaction = async (ids: Transaction["id"][]) => {
+  deleteTransactionsSchema.parse(ids);
+
+  const deletedIds = ids.map((id) => `:${id}`).join("");
+  await axios.post(
+    "/delete",
+    { ids: deletedIds },
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+    },
+  );
+};
+
 const globalService = {
   getInitData,
   getDataByPeriod,
   postCreateTransaction,
+  postDeleteTransaction,
 };
 
 export default globalService;

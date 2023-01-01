@@ -21,3 +21,7 @@ export const createTransactionPayloadSchema = z.object({
 });
 
 export type CreateTransactionPayload = z.infer<typeof createTransactionPayloadSchema>;
+
+export const deleteTransactionsSchema = z.array(z.string());
+
+export type DeleteTransactionsSchema = z.infer<typeof createTransactionPayloadSchema>;
