@@ -5,7 +5,9 @@ import { dateSortComparison, stringSortComparison } from "~/helpers/sort-fn";
 import { currencyFormatter } from "~/helpers/string-helper";
 import AccountSelect from "../transaction-form/account-select";
 import AmountInput from "../transaction-form/amount-input";
+import CategorySelect from "../transaction-form/category-select";
 import ContentSelect from "../transaction-form/content-select";
+import SubCategorySelect from "../transaction-form/sub-category-select";
 import TransactionTableAction from "./transaction-table-action";
 
 export interface TransactionColumn {
@@ -70,11 +72,17 @@ export const getTransactionColumns = ({
       dataIndex: "category",
       key: "category",
       sorter: (a, b) => stringSortComparison(a.category, b.category),
+      editable: true,
+      renderEditInput: (record) => <CategorySelect defaultValue={record.category} />,
     },
     {
       title: "Sub-Category",
       dataIndex: "subCategory",
       key: "subCategory",
+      editable: true,
+      renderEditInput: (record) => (
+        <SubCategorySelect category={record.category} defaultValue={record.subCategory} />
+      ),
       sorter: (a, b) => stringSortComparison(a.subCategory, b.subCategory),
     },
     {

@@ -1,5 +1,4 @@
 import { Select, SelectProps } from "antd";
-import React from "react";
 import { useAccountStore } from "~/stores/account.store";
 
 interface AccountSelectProps extends SelectProps {}

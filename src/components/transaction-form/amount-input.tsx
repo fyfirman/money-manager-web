@@ -1,5 +1,4 @@
 import { InputNumber, InputNumberProps } from "antd";
-import React from "react";
 
 interface AmountInputProps extends InputNumberProps {}
 

@@ -16,6 +16,7 @@ export interface Category {
 export interface CategoryState {
   categories: Category[];
   getSubCategories(id: Category["id"]): Category["children"];
+  getSubCategoriesByName(name: Category["name"]): Category["children"];
 }
 
 export const useCategoryStore = create<CategoryState>()(
@@ -25,6 +26,16 @@ export const useCategoryStore = create<CategoryState>()(
       getSubCategories(id) {
         const { categories } = get();
         const result = categories.find((subCategory) => subCategory.id === id);
+
+        if (!result) {
+          return [];
+        }
+
+        return result.children;
+      },
+      getSubCategoriesByName(name) {
+        const { categories } = get();
+        const result = categories.find((subCategory) => subCategory.name === name);
 
         if (!result) {
           return [];
