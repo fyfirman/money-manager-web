@@ -3,6 +3,7 @@ import { ColumnType } from "antd/es/table";
 import dayjs from "dayjs";
 import { dateSortComparison, stringSortComparison } from "~/helpers/sort-fn";
 import { currencyFormatter } from "~/helpers/string-helper";
+import AccountSelect from "../transaction-form/account-select";
 import AmountInput from "../transaction-form/amount-input";
 import ContentSelect from "../transaction-form/content-select";
 import TransactionTableAction from "./transaction-table-action";
@@ -60,6 +61,8 @@ export const getTransactionColumns = ({
       title: "Account",
       dataIndex: "account",
       key: "account",
+      editable: true,
+      renderEditInput: (record) => <AccountSelect defaultValue={record.account} />,
       sorter: (a, b) => stringSortComparison(a.account, b.account),
     },
     {

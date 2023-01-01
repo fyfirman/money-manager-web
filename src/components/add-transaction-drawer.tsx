@@ -15,12 +15,12 @@ import dayjs from "dayjs";
 import { useMutation } from "@tanstack/react-query";
 import globalService from "~/services/global-service.service";
 import { CategoryType, useCategoryStore } from "~/stores/category.store";
-import { useAccountStore } from "~/stores/account.store";
 import { CreateTransactionPayload, InOutType } from "~/services/global-service.schema";
 import { ZodError } from "zod";
 import { queryClient } from "~/utils/query-client";
 import ContentItem from "./transaction-form/content-select";
 import AmountInput from "./transaction-form/amount-input";
+import AccountSelect from "./transaction-form/account-select";
 
 interface AddTransactionDrawerProps extends DrawerProps {
   onClose: () => void;
@@ -39,7 +39,6 @@ export interface AddNewTransactionForm {
 const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
   const { onClose, ...rest } = props;
 
-  const accounts = useAccountStore((state) => state.accounts);
   const expenseCategories = useCategoryStore((state) =>
     state.categories.filter((c) => c.type === CategoryType.Expense),
   );
@@ -111,14 +110,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
               name="account"
               rules={[{ required: true, message: "Please choose the account" }]}
             >
-              <Select
-                allowClear
-                options={accounts.map((a) => ({
-                  label: a.name,
-                  value: a.id,
-                }))}
-                placeholder="Please choose the account"
-              />
+              <AccountSelect />
             </Form.Item>
           </Col>
         </Row>

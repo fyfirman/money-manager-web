@@ -1,9 +1,7 @@
-import { Select } from "antd";
+import { Select, SelectProps } from "antd";
 import { useTransactionStore } from "~/stores/transaction.store";
 
-interface ContentSelectProps {
-  defaultValue?: any; // TODO: Replace any with right type
-}
+interface ContentSelectProps extends SelectProps {}
 
 const ContentSelect: React.FC<ContentSelectProps> = ({ defaultValue }) => {
   const possibleContents = useTransactionStore((state) => state.getListedContent());
