@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { Button, Form, Popconfirm, Table, TableProps } from "antd";
-import { TableRowSelection } from "antd/es/table/interface";
+import { ColumnsType, TableRowSelection } from "antd/es/table/interface";
 import React, { useState } from "react";
 import { errorHandler } from "~/helpers/error-handler";
 import globalService from "~/services/global-service.service";
@@ -72,12 +72,15 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
       </div>
       <Form component={false} form={form}>
         <Table<TransactionColumn>
-          columns={getEditableTransactionColumns({
-            editingKey,
-            onSave: handleEditSave,
-            onEdit: handleEditClick,
-            onCancel: handleEditCancel,
-          })}
+          columns={
+            getEditableTransactionColumns({
+              editingKey,
+              onSave: handleEditSave,
+              onEdit: handleEditClick,
+              onCancel: handleEditCancel,
+              form,
+            }) as ColumnsType<TransactionColumn>
+          }
           components={{
             body: {
               cell: EditableCell,

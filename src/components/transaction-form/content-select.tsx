@@ -3,15 +3,16 @@ import { useTransactionStore } from "~/stores/transaction.store";
 
 interface ContentSelectProps extends SelectProps {}
 
-const ContentSelect: React.FC<ContentSelectProps> = ({ defaultValue }) => {
+const ContentSelect: React.FC<ContentSelectProps> = (props) => {
   const possibleContents = useTransactionStore((state) => state.getListedContent());
 
   return (
     <Select
       allowClear
-      defaultValue={defaultValue}
       filterOption={(input, option) =>
-        (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+        String(option?.label ?? "")
+          .toLowerCase()
+          .includes(input.toLowerCase())
       }
       options={possibleContents.map((c) => ({
         label: c,
@@ -19,6 +20,7 @@ const ContentSelect: React.FC<ContentSelectProps> = ({ defaultValue }) => {
       }))}
       placeholder="Please choose the content"
       showSearch
+      {...props}
     />
   );
 };

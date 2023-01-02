@@ -29,9 +29,13 @@ const EditableCell = <Item extends unknown>({
   return (
     <td {...restProps}>
       {editing ? (
-        <Form.Item name={dataIndex} rules={rules} style={{ margin: 0 }}>
-          {InputNode ? <InputNode /> : <Input />}
-        </Form.Item>
+        InputNode ? (
+          <InputNode />
+        ) : (
+          <Form.Item name={dataIndex} rules={rules} style={{ margin: 0 }}>
+            <Input />
+          </Form.Item>
+        )
       ) : (
         children
       )}

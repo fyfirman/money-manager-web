@@ -1,8 +1,9 @@
-import { DatePicker } from "antd";
+import { DatePicker, Form, FormInstance } from "antd";
 import { ColumnType } from "antd/es/table";
 import dayjs from "dayjs";
 import { dateSortComparison, stringSortComparison } from "~/helpers/sort-fn";
 import { currencyFormatter } from "~/helpers/string-helper";
+import { useCategoryStore } from "~/stores/category.store";
 import AccountSelect from "../transaction-form/account-select";
 import AmountInput from "../transaction-form/amount-input";
 import CategorySelect from "../transaction-form/category-select";
@@ -26,6 +27,7 @@ export interface GetTransactionColumnsParams {
   onSave?: (record: TransactionColumn) => void;
   onEdit?: (record: TransactionColumn) => void;
   onCancel?: (record: TransactionColumn) => void;
+  form: FormInstance;
 }
 
 export type TransactionColumnsType = (
@@ -40,6 +42,7 @@ export const getTransactionColumns = ({
   onSave,
   onEdit,
   onCancel,
+  form,
 }: GetTransactionColumnsParams): TransactionColumnsType => {
   return [
     {
@@ -64,7 +67,15 @@ export const getTransactionColumns = ({
       dataIndex: "account",
       key: "account",
       editable: true,
-      renderEditInput: (record) => <AccountSelect defaultValue={record.account} />,
+      renderEditInput: (record) => (
+        <Form.Item
+          name="account"
+          rules={[{ required: true, message: "Please choose the account" }]}
+          style={{ margin: 0 }}
+        >
+          <AccountSelect defaultValue={record.account} />
+        </Form.Item>
+      ),
       sorter: (a, b) => stringSortComparison(a.account, b.account),
     },
     {
@@ -73,7 +84,18 @@ export const getTransactionColumns = ({
       key: "category",
       sorter: (a, b) => stringSortComparison(a.category, b.category),
       editable: true,
-      renderEditInput: (record) => <CategorySelect defaultValue={record.category} />,
+      renderEditInput: (record) => (
+        <Form.Item
+          name="category"
+          rules={[{ required: true, message: "Please choose the category" }]}
+          style={{ margin: 0 }}
+        >
+          <CategorySelect
+            defaultValue={record.category}
+            onChange={() => form.setFieldValue("subCategory", undefined)}
+          />
+        </Form.Item>
+      ),
     },
     {
       title: "Sub-Category",
@@ -81,7 +103,46 @@ export const getTransactionColumns = ({
       key: "subCategory",
       editable: true,
       renderEditInput: (record) => (
-        <SubCategorySelect category={record.category} defaultValue={record.subCategory} />
+        <Form.Item
+          className="mb-0"
+          shouldUpdate={(prevValues, currentValues) =>
+            prevValues.category !== currentValues.category
+          }
+        >
+          {({ getFieldValue }) => {
+            const subCategory = (() => {
+              if (!getFieldValue("category")) {
+                return [];
+              }
+
+              return useCategoryStore
+                .getState()
+                .getSubCategories(getFieldValue("category") as string)
+                .map((c) => ({
+                  label: c.name,
+                  value: c.id,
+                }));
+            })();
+
+            return (
+              <Form.Item
+                name="subCategory"
+                rules={[
+                  {
+                    required: subCategory.length > 0,
+                    message: "Please choose the sub-category",
+                  },
+                ]}
+                style={{ margin: 0 }}
+              >
+                <SubCategorySelect
+                  category={getFieldValue("category")}
+                  defaultValue={record.subCategory}
+                />
+              </Form.Item>
+            );
+          }}
+        </Form.Item>
       ),
       sorter: (a, b) => stringSortComparison(a.subCategory, b.subCategory),
     },
@@ -90,7 +151,15 @@ export const getTransactionColumns = ({
       dataIndex: "content",
       key: "content",
       editable: true,
-      renderEditInput: (record) => <ContentSelect defaultValue={record.content} />,
+      renderEditInput: (record) => (
+        <Form.Item
+          name="content"
+          rules={[{ required: true, message: "Please choose the content" }]}
+          style={{ margin: 0 }}
+        >
+          <ContentSelect defaultValue={record.content} />
+        </Form.Item>
+      ),
       sorter: (a, b) => stringSortComparison(a.content, b.content),
     },
     {
@@ -100,7 +169,15 @@ export const getTransactionColumns = ({
       sorter: (a, b) => b.amount - a.amount,
       editable: true,
       renderEditInput(record) {
-        return <AmountInput defaultValue={record.amount} />;
+        return (
+          <Form.Item
+            name="amount"
+            rules={[{ required: true, message: "Please choose the amount" }]}
+            style={{ margin: 0 }}
+          >
+            <AmountInput defaultValue={record.amount} />
+          </Form.Item>
+        );
       },
       render(value) {
         return currencyFormatter(value as number);

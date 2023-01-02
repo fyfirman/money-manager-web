@@ -15,7 +15,7 @@ const SubCategorySelect: React.FC<SubCategorySelectProps> = (props) => {
 
     return useCategoryStore
       .getState()
-      .getSubCategoriesByName(category)
+      .getSubCategories(category)
       .map((c) => ({
         label: c.name,
         value: c.id,

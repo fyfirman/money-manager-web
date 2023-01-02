@@ -157,6 +157,9 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
                         message: "Please choose the sub-category",
                       },
                     ]}
+                    shouldUpdate={(prevValues, currentValues) =>
+                      prevValues.category !== currentValues.category
+                    }
                   >
                     <SubCategorySelect category={getFieldValue("category")} />
                   </Form.Item>
