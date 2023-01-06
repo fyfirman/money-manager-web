@@ -8,13 +8,16 @@ import { Transaction } from "~/stores/transaction.store";
 import { queryClient } from "~/utils/query-client";
 import { numWords } from "~/libs/num-words/num-words";
 import { titleCase } from "~/libs/title-case/title-case";
+import { useCategoryStore } from "~/stores/category.store";
+import { useAccountStore } from "~/stores/account.store";
 import EditableCell from "../editable-cell";
+import { AddNewTransactionForm } from "../add-transaction-drawer";
 import { TransactionColumn, getEditableTransactionColumns } from "./transaction-columns";
 
 const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
   const [selectedRows, setSelectedRows] = useState<Transaction["id"][]>([]);
   const [editingKey, setEditingKey] = useState<Transaction["id"]>("");
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<AddNewTransactionForm>();
 
   const deleteMutation = useMutation(
     ["deleteTransaction"],
@@ -28,7 +31,18 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
   };
 
   const handleEditClick = (record: TransactionColumn) => {
-    form.setFieldsValue(record);
+    const account = useAccountStore.getState().getAccountByName(record.account)?.id;
+    const category = useCategoryStore.getState().getCategoryByName(record.category)?.id;
+    const subCategory = useCategoryStore
+      .getState()
+      .getSubCategoryByName(record.subCategory)?.id;
+
+    form.setFieldsValue({
+      ...record,
+      account,
+      category,
+      subCategory,
+    });
     setEditingKey(record.id);
   };
 
