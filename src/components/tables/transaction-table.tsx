@@ -10,6 +10,7 @@ import { numWords } from "~/libs/num-words/num-words";
 import { titleCase } from "~/libs/title-case/title-case";
 import { useCategoryStore } from "~/stores/category.store";
 import { useAccountStore } from "~/stores/account.store";
+import dayjs from "dayjs";
 import EditableCell from "../editable-cell";
 import { AddNewTransactionForm } from "../add-transaction-drawer";
 import { TransactionColumn, getEditableTransactionColumns } from "./transaction-columns";
@@ -46,11 +47,13 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
       account,
       category,
       subCategory,
+      date: dayjs(record.date),
     });
     setEditingKey(record.id);
   };
 
   const handleEditCancel = () => {
+    form.resetFields();
     setEditingKey("");
   };
 

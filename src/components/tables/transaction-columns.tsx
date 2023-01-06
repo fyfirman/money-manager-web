@@ -50,12 +50,19 @@ export const getTransactionColumns = ({
       editable: true,
       renderEditInput(record) {
         return (
-          <DatePicker
-            defaultValue={dayjs(record.date)}
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion --- disabled due to antd docs example
-            getPopupContainer={(trigger) => trigger.parentElement!}
-            style={{ width: "100%" }}
-          />
+          <Form.Item
+            initialValue={dayjs()}
+            name="date"
+            rules={[{ required: true, message: "Please choose the date" }]}
+            style={{ margin: 0 }}
+          >
+            <DatePicker
+              defaultValue={dayjs(record.date)}
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion --- disabled due to antd docs example
+              getPopupContainer={(trigger) => trigger.parentElement!}
+              style={{ width: "100%" }}
+            />
+          </Form.Item>
         );
       },
       sorter: (a, b) => dateSortComparison(new Date(a.date), new Date(b.date)),
