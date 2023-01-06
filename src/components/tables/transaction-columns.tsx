@@ -24,7 +24,6 @@ export interface TransactionColumn {
 
 export interface GetTransactionColumnsParams {
   editingKey: TransactionColumn["id"];
-  onSave?: (record: TransactionColumn) => void;
   onEdit?: (record: TransactionColumn) => void;
   onCancel?: (record: TransactionColumn) => void;
   form: FormInstance;
@@ -39,7 +38,6 @@ export type TransactionColumnsType = (
 
 export const getTransactionColumns = ({
   editingKey,
-  onSave,
   onEdit,
   onCancel,
   form,
@@ -196,7 +194,7 @@ export const getTransactionColumns = ({
             editingKey={editingKey}
             onCancel={onCancel}
             onEdit={onEdit}
-            onSave={onSave}
+            onSave={form.submit}
             record={record}
           />
         );

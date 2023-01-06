@@ -14,10 +14,14 @@ import EditableCell from "../editable-cell";
 import { AddNewTransactionForm } from "../add-transaction-drawer";
 import { TransactionColumn, getEditableTransactionColumns } from "./transaction-columns";
 
+interface EditTransactionForm extends AddNewTransactionForm {
+  id: string;
+}
+
 const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
   const [selectedRows, setSelectedRows] = useState<Transaction["id"][]>([]);
   const [editingKey, setEditingKey] = useState<Transaction["id"]>("");
-  const [form] = Form.useForm<AddNewTransactionForm>();
+  const [form] = Form.useForm<EditTransactionForm>();
 
   const deleteMutation = useMutation(
     ["deleteTransaction"],
@@ -50,7 +54,7 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
     setEditingKey("");
   };
 
-  const handleEditSave = () => {
+  const handleEditSubmit = (values: EditTransactionForm) => {
     setEditingKey("");
   };
 
@@ -84,12 +88,11 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
           <Button disabled={selectedRows.length === 0}>Delete</Button>
         </Popconfirm>
       </div>
-      <Form component={false} form={form}>
+      <Form component={false} form={form} onFinish={handleEditSubmit}>
         <Table<TransactionColumn>
           columns={
             getEditableTransactionColumns({
               editingKey,
-              onSave: handleEditSave,
               onEdit: handleEditClick,
               onCancel: handleEditCancel,
               form,
