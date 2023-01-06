@@ -8,14 +8,26 @@ interface Account {
 
 interface AccountState {
   accounts: Account[];
+  getAccountByName: (name: Account["name"]) => Account | undefined;
 }
 
-const initState: AccountState = {
-  accounts: [],
-};
-
 export const useAccountStore = create<AccountState>()(
-  devtools(() => initState, {
-    name: "Account",
-  }),
+  devtools(
+    (set, get) => ({
+      accounts: [],
+      getAccountByName(name) {
+        const { accounts } = get();
+        const result = accounts.find((account) => account.name === name);
+
+        if (!result) {
+          return undefined;
+        }
+
+        return result;
+      },
+    }),
+    {
+      name: "Account",
+    },
+  ),
 );
