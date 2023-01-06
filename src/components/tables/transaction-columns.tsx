@@ -84,25 +84,26 @@ export const getTransactionColumns = ({
       key: "category",
       sorter: (a, b) => stringSortComparison(a.category, b.category),
       editable: true,
-      renderEditInput: (record) => (
-        <Form.Item
-          name="category"
-          rules={[{ required: true, message: "Please choose the category" }]}
-          style={{ margin: 0 }}
-        >
-          <CategorySelect
-            defaultValue={record.category}
-            onChange={() => form.setFieldValue("subCategory", undefined)}
-          />
-        </Form.Item>
-      ),
+      renderEditInput: () => {
+        return (
+          <Form.Item
+            name="category"
+            rules={[{ required: true, message: "Please choose the category" }]}
+            style={{ margin: 0 }}
+          >
+            <CategorySelect
+              onChange={() => form.setFieldValue("subCategory", undefined)}
+            />
+          </Form.Item>
+        );
+      },
     },
     {
       title: "Sub-Category",
       dataIndex: "subCategory",
       key: "subCategory",
       editable: true,
-      renderEditInput: (record) => (
+      renderEditInput: () => (
         <Form.Item
           className="mb-0"
           shouldUpdate={(prevValues, currentValues) =>
@@ -110,7 +111,7 @@ export const getTransactionColumns = ({
           }
         >
           {({ getFieldValue }) => {
-            const subCategory = (() => {
+            const subCategories = (() => {
               if (!getFieldValue("category")) {
                 return [];
               }
@@ -129,16 +130,13 @@ export const getTransactionColumns = ({
                 name="subCategory"
                 rules={[
                   {
-                    required: subCategory.length > 0,
+                    required: subCategories.length > 0,
                     message: "Please choose the sub-category",
                   },
                 ]}
                 style={{ margin: 0 }}
               >
-                <SubCategorySelect
-                  category={getFieldValue("category")}
-                  defaultValue={record.subCategory}
-                />
+                <SubCategorySelect category={getFieldValue("category")} />
               </Form.Item>
             );
           }}
