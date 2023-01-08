@@ -26,7 +26,7 @@ const TransactionTableAction: React.FC<TransactionTableActionProps> = ({
   if (record.id === editingKey) {
     return (
       <span>
-        <Typography.Link onClick={() => onSave(record)} style={{ marginRight: 8 }}>
+        <Typography.Link className="mr-2" onClick={() => onSave(record)}>
           Save
         </Typography.Link>
         <Typography.Link onClick={() => onCancel(record)}>Cancel</Typography.Link>

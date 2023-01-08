@@ -32,7 +32,7 @@ const EditableCell = <Item extends unknown>({
         InputNode ? (
           <InputNode />
         ) : (
-          <Form.Item name={dataIndex} rules={rules} style={{ margin: 0 }}>
+          <Form.Item className="m-0" name={dataIndex} rules={rules}>
             <Input />
           </Form.Item>
         )
