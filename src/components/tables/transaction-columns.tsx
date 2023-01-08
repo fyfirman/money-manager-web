@@ -52,10 +52,10 @@ export const getTransactionColumns = ({
         return (
           <>
             <Form.Item
+              className="m-0"
               initialValue={dayjs()}
               name="date"
               rules={[{ required: true, message: "Please choose the date" }]}
-              style={{ margin: 0 }}
             >
               <DatePicker
                 defaultValue={dayjs(record.date)}
@@ -79,9 +79,9 @@ export const getTransactionColumns = ({
       editable: true,
       renderEditInput: (record) => (
         <Form.Item
+          className="m-0"
           name="account"
           rules={[{ required: true, message: "Please choose the account" }]}
-          style={{ margin: 0 }}
         >
           <AccountSelect defaultValue={record.account} />
         </Form.Item>
@@ -97,9 +97,9 @@ export const getTransactionColumns = ({
       renderEditInput: () => {
         return (
           <Form.Item
+            className="m-0"
             name="category"
             rules={[{ required: true, message: "Please choose the category" }]}
-            style={{ margin: 0 }}
           >
             <CategorySelect
               onChange={() => form.setFieldValue("subCategory", undefined)}
@@ -115,7 +115,7 @@ export const getTransactionColumns = ({
       editable: true,
       renderEditInput: () => (
         <Form.Item
-          className="mb-0"
+          className="m-0"
           shouldUpdate={(prevValues, currentValues) =>
             prevValues.category !== currentValues.category
           }
@@ -137,6 +137,7 @@ export const getTransactionColumns = ({
 
             return (
               <Form.Item
+                className="m-0"
                 name="subCategory"
                 rules={[
                   {
@@ -144,7 +145,6 @@ export const getTransactionColumns = ({
                     message: "Please choose the sub-category",
                   },
                 ]}
-                style={{ margin: 0 }}
               >
                 <SubCategorySelect category={getFieldValue("category")} />
               </Form.Item>
@@ -161,9 +161,9 @@ export const getTransactionColumns = ({
       editable: true,
       renderEditInput: (record) => (
         <Form.Item
+          className="m-0"
           name="content"
           rules={[{ required: true, message: "Please choose the content" }]}
-          style={{ margin: 0 }}
         >
           <ContentSelect defaultValue={record.content} form={form} />
         </Form.Item>
@@ -179,9 +179,9 @@ export const getTransactionColumns = ({
       renderEditInput(record) {
         return (
           <Form.Item
+            className="m-0"
             name="amount"
             rules={[{ required: true, message: "Please choose the amount" }]}
-            style={{ margin: 0 }}
           >
             <AmountInput defaultValue={record.amount} />
           </Form.Item>
