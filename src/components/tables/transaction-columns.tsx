@@ -165,7 +165,7 @@ export const getTransactionColumns = ({
           rules={[{ required: true, message: "Please choose the content" }]}
           style={{ margin: 0 }}
         >
-          <ContentSelect defaultValue={record.content} />
+          <ContentSelect defaultValue={record.content} form={form} />
         </Form.Item>
       ),
       sorter: (a, b) => stringSortComparison(a.content, b.content),

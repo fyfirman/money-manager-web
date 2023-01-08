@@ -175,7 +175,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
               name="content"
               rules={[{ required: true, message: "Please choose the content" }]}
             >
-              <ContentItem />
+              <ContentItem form={form} />
             </Form.Item>
           </Col>
         </Row>
