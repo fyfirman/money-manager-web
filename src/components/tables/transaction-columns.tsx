@@ -58,10 +58,10 @@ export const getTransactionColumns = ({
               rules={[{ required: true, message: "Please choose the date" }]}
             >
               <DatePicker
+                className="w-full"
                 defaultValue={dayjs(record.date)}
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion --- disabled due to antd docs example
                 getPopupContainer={(trigger) => trigger.parentElement!}
-                style={{ width: "100%" }}
               />
             </Form.Item>
             <Form.Item name="id" noStyle>
