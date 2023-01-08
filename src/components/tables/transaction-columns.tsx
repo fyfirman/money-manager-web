@@ -1,4 +1,4 @@
-import { DatePicker, Form, FormInstance } from "antd";
+import { DatePicker, Form, FormInstance, Input } from "antd";
 import { ColumnType } from "antd/es/table";
 import dayjs from "dayjs";
 import { dateSortComparison, stringSortComparison } from "~/helpers/sort-fn";
@@ -9,7 +9,6 @@ import AmountInput from "../transaction-form/amount-input";
 import CategorySelect from "../transaction-form/category-select";
 import ContentSelect from "../transaction-form/content-select";
 import SubCategorySelect from "../transaction-form/sub-category-select";
-import TransactionTableAction from "./transaction-table-action";
 
 export interface TransactionColumn {
   id: string;
@@ -23,10 +22,13 @@ export interface TransactionColumn {
 }
 
 export interface GetTransactionColumnsParams {
-  editingKey: TransactionColumn["id"];
-  onEdit?: (record: TransactionColumn) => void;
-  onCancel?: (record: TransactionColumn) => void;
   form: FormInstance;
+  editingKey: TransactionColumn["id"];
+  renderAction: (
+    value: undefined,
+    record: TransactionColumn,
+    index: number,
+  ) => React.ReactNode;
 }
 
 export type TransactionColumnsType = (
@@ -37,10 +39,8 @@ export type TransactionColumnsType = (
 )[];
 
 export const getTransactionColumns = ({
-  editingKey,
-  onEdit,
-  onCancel,
   form,
+  renderAction,
 }: GetTransactionColumnsParams): TransactionColumnsType => {
   return [
     {
@@ -50,19 +50,24 @@ export const getTransactionColumns = ({
       editable: true,
       renderEditInput(record) {
         return (
-          <Form.Item
-            initialValue={dayjs()}
-            name="date"
-            rules={[{ required: true, message: "Please choose the date" }]}
-            style={{ margin: 0 }}
-          >
-            <DatePicker
-              defaultValue={dayjs(record.date)}
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion --- disabled due to antd docs example
-              getPopupContainer={(trigger) => trigger.parentElement!}
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
+          <>
+            <Form.Item
+              initialValue={dayjs()}
+              name="date"
+              rules={[{ required: true, message: "Please choose the date" }]}
+              style={{ margin: 0 }}
+            >
+              <DatePicker
+                defaultValue={dayjs(record.date)}
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion --- disabled due to antd docs example
+                getPopupContainer={(trigger) => trigger.parentElement!}
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+            <Form.Item name="id" noStyle>
+              <Input type="hidden" />
+            </Form.Item>
+          </>
         );
       },
       sorter: (a, b) => dateSortComparison(new Date(a.date), new Date(b.date)),
@@ -195,17 +200,7 @@ export const getTransactionColumns = ({
     {
       title: "Action",
       width: 120,
-      render(value, record) {
-        return (
-          <TransactionTableAction
-            editingKey={editingKey}
-            onCancel={onCancel}
-            onEdit={onEdit}
-            onSave={form.submit}
-            record={record}
-          />
-        );
-      },
+      render: renderAction,
     },
   ];
 };

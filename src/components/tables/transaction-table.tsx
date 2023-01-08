@@ -11,19 +11,29 @@ import { titleCase } from "~/libs/title-case/title-case";
 import { useCategoryStore } from "~/stores/category.store";
 import { useAccountStore } from "~/stores/account.store";
 import dayjs from "dayjs";
+import { InOutType } from "~/services/global-service.schema";
 import EditableCell from "../editable-cell";
-import { AddNewTransactionForm } from "../add-transaction-drawer";
 import { TransactionColumn, getEditableTransactionColumns } from "./transaction-columns";
+import TransactionTableAction from "./transaction-table-action";
 
-interface EditTransactionForm extends AddNewTransactionForm {
+interface EditTransactionForm {
   id: string;
+  date: dayjs.Dayjs;
+  account: string;
+  category: string;
+  subCategory: string;
+  content: string;
+  amount: number;
 }
 
 const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
   const [selectedRows, setSelectedRows] = useState<Transaction["id"][]>([]);
   const [editingKey, setEditingKey] = useState<Transaction["id"]>("");
   const [form] = Form.useForm<EditTransactionForm>();
-
+  const updateMutation = useMutation(
+    ["updateTransaction"],
+    globalService.postUpdateTransaction,
+  );
   const deleteMutation = useMutation(
     ["deleteTransaction"],
     globalService.postDeleteTransaction,
@@ -57,8 +67,25 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
     setEditingKey("");
   };
 
-  const handleEditSubmit = (values: EditTransactionForm) => {
+  const handleEditSubmit = async (values: EditTransactionForm) => {
+    await updateMutation.mutateAsync({
+      id: values.id,
+      mbDate: `${values.date.format("YYYY-MM-DD")}T00:00:00`,
+      mbCash: values.amount,
+      assetId: values.account,
+      inOutType: InOutType.Expense,
+      inOutCode: "1", // 1 for Expense
+      payType: values.account,
+      mbCategory: values.category,
+      subCategory: values.subCategory,
+      mbContent: values.content,
+      mcid: values.category,
+      mcscid: values.subCategory,
+    });
+
     setEditingKey("");
+
+    void queryClient.refetchQueries(["getTransactions"]);
   };
 
   const handleDeleteClick = async () => {
@@ -95,10 +122,20 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
         <Table<TransactionColumn>
           columns={
             getEditableTransactionColumns({
-              editingKey,
-              onEdit: handleEditClick,
-              onCancel: handleEditCancel,
               form,
+              editingKey,
+              renderAction(value, record) {
+                return (
+                  <TransactionTableAction
+                    editingKey={editingKey}
+                    isLoading={updateMutation.isLoading}
+                    onCancel={handleEditCancel}
+                    onEdit={handleEditClick}
+                    onSave={form.submit}
+                    record={record}
+                  />
+                );
+              },
             }) as ColumnsType<TransactionColumn>
           }
           components={{

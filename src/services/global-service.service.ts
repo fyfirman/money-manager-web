@@ -1,3 +1,4 @@
+import { parseToXwwwFormUrlWithSpace } from "~/helpers/body-parser";
 import { InitDataResponse } from "~/interfaces/init-data";
 import { TransactionRaw } from "~/interfaces/transaction-raw";
 import { axios, getBaseUrl } from "~/utils/axios-client";
@@ -7,6 +8,8 @@ import {
   CreateTransactionPayload,
   createTransactionPayloadSchema,
   deleteTransactionsSchema,
+  UpdateTransactionPayload,
+  updateTransactionPayloadSchema,
 } from "./global-service.schema";
 
 const getInitData = async () => {
@@ -50,15 +53,22 @@ const getDataByPeriod = async (
 const postCreateTransaction = async (payload: CreateTransactionPayload) => {
   createTransactionPayloadSchema.parse(payload);
 
-  const params = new URLSearchParams();
-  Object.keys(payload).forEach((key) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument --- this code below is not right.
-    params.append(key, (payload as any)[key]);
-  });
+  const body = parseToXwwwFormUrlWithSpace(payload);
 
   await fetch(`${getBaseUrl()}/create`, {
     method: "POST",
-    body: params.toString().replaceAll("+", "%20"),
+    body,
+  });
+};
+
+const postUpdateTransaction = async (payload: UpdateTransactionPayload) => {
+  updateTransactionPayloadSchema.parse(payload);
+
+  const body = parseToXwwwFormUrlWithSpace(payload);
+
+  await fetch(`${getBaseUrl()}/update`, {
+    method: "POST",
+    body,
   });
 };
 
@@ -81,6 +91,7 @@ const globalService = {
   getInitData,
   getDataByPeriod,
   postCreateTransaction,
+  postUpdateTransaction,
   postDeleteTransaction,
 };
 

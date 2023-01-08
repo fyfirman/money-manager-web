@@ -1,9 +1,11 @@
-import { Spin } from "antd";
+import { Spin, SpinProps } from "antd";
 import React from "react";
 
-const Loading: React.FC = () => {
+interface LoadingProps extends SpinProps {}
+
+const Loading: React.FC<LoadingProps> = (props) => {
   return (
-    <Spin size="large" tip="Loading">
+    <Spin size="large" {...props}>
       <div className="content" />
     </Spin>
   );
