@@ -17,6 +17,7 @@ import { useCategoryStore } from "~/stores/category.store";
 import { CreateTransactionPayload, InOutType } from "~/services/global-service.schema";
 import { ZodError } from "zod";
 import { queryClient } from "~/utils/query-client";
+import { useEffect } from "react";
 import ContentItem from "./transaction-form/content-select";
 import AmountInput from "./transaction-form/amount-input";
 import AccountSelect from "./transaction-form/account-select";
@@ -24,6 +25,7 @@ import CategorySelect from "./transaction-form/category-select";
 import SubCategorySelect from "./transaction-form/sub-category-select";
 
 interface AddTransactionDrawerProps extends DrawerProps {
+  initialDate?: Date;
   onClose: () => void;
 }
 
@@ -38,11 +40,17 @@ export interface AddNewTransactionForm {
 }
 
 const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
-  const { onClose, ...rest } = props;
+  const { onClose, initialDate, ...rest } = props;
 
   const mutation = useMutation(["transaction"], globalService.postCreateTransaction);
 
   const [form] = Form.useForm<AddNewTransactionForm>();
+
+  useEffect(() => {
+    if (initialDate) {
+      form.setFieldValue("date", dayjs(initialDate));
+    }
+  }, [form, initialDate]);
 
   const handleFinish = async (values: AddNewTransactionForm) => {
     try {
@@ -87,7 +95,7 @@ const AddTransactionDrawer: React.FC<AddTransactionDrawerProps> = (props) => {
         <Row gutter={8}>
           <Col span={24}>
             <Form.Item
-              initialValue={dayjs()}
+              initialValue={dayjs(initialDate)}
               label="Date"
               name="date"
               rules={[{ required: true, message: "Please choose the date" }]}

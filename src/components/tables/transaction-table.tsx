@@ -13,6 +13,7 @@ import { useAccountStore } from "~/stores/account.store";
 import dayjs from "dayjs";
 import { InOutType } from "~/services/global-service.schema";
 import EditableCell from "../editable-cell";
+import AddTransactionDrawer from "../add-transaction-drawer";
 import { TransactionColumn, getEditableTransactionColumns } from "./transaction-columns";
 import TransactionTableAction from "./transaction-table-action";
 
@@ -29,6 +30,9 @@ interface EditTransactionForm {
 const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
   const [selectedRows, setSelectedRows] = useState<Transaction["id"][]>([]);
   const [editingKey, setEditingKey] = useState<Transaction["id"]>("");
+  const [addDrawerOpen, setAddDrawerOpen] = useState(false);
+  const [dateDrawer, setDateDrawer] = useState<Date>();
+
   const [form] = Form.useForm<EditTransactionForm>();
   const updateMutation = useMutation(
     ["updateTransaction"],
@@ -103,52 +107,75 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
     }
   };
 
+  const handleDateClick = (value: string) => {
+    setDateDrawer(new Date(value));
+    setAddDrawerOpen(true);
+  };
+
   return (
-    <div>
-      <div className="mb-2">
-        <Popconfirm
-          cancelText="No"
-          okText="Yes"
-          onConfirm={handleDeleteClick}
-          placement="topLeft"
-          title={`${titleCase(numWords(selectedRows.length))} (${
-            selectedRows.length
-          }) transactions are selected. Are you sure to delete these transactions?`}
-        >
-          <Button disabled={selectedRows.length === 0}>Delete</Button>
-        </Popconfirm>
-      </div>
-      <Form component={false} form={form} onFinish={handleEditSubmit}>
-        <Table<TransactionColumn>
-          columns={
-            getEditableTransactionColumns({
-              form,
-              editingKey,
-              renderAction(value, record) {
-                return (
-                  <TransactionTableAction
-                    editingKey={editingKey}
-                    isLoading={updateMutation.isLoading}
-                    onCancel={handleEditCancel}
-                    onEdit={handleEditClick}
-                    onSave={form.submit}
-                    record={record}
-                  />
-                );
+    <>
+      <div>
+        <div className="mb-2">
+          <Popconfirm
+            cancelText="No"
+            okText="Yes"
+            onConfirm={handleDeleteClick}
+            placement="topLeft"
+            title={`${titleCase(numWords(selectedRows.length))} (${
+              selectedRows.length
+            }) transactions are selected. Are you sure to delete these transactions?`}
+          >
+            <Button disabled={selectedRows.length === 0}>Delete</Button>
+          </Popconfirm>
+        </div>
+        <Form component={false} form={form} onFinish={handleEditSubmit}>
+          <Table<TransactionColumn>
+            columns={
+              getEditableTransactionColumns({
+                form,
+                editingKey,
+                renderDate(value) {
+                  return (
+                    <a
+                      className="text-blue-600"
+                      href="#"
+                      onClick={() => handleDateClick(value)}
+                    >
+                      {value}
+                    </a>
+                  );
+                },
+                renderAction(value, record) {
+                  return (
+                    <TransactionTableAction
+                      editingKey={editingKey}
+                      isLoading={updateMutation.isLoading}
+                      onCancel={handleEditCancel}
+                      onEdit={handleEditClick}
+                      onSave={form.submit}
+                      record={record}
+                    />
+                  );
+                },
+              }) as ColumnsType<TransactionColumn>
+            }
+            components={{
+              body: {
+                cell: EditableCell,
               },
-            }) as ColumnsType<TransactionColumn>
-          }
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-          rowKey="id"
-          rowSelection={rowSelection}
-          {...props}
-        />
-      </Form>
-    </div>
+            }}
+            rowKey="id"
+            rowSelection={rowSelection}
+            {...props}
+          />
+        </Form>
+      </div>
+      <AddTransactionDrawer
+        initialDate={dateDrawer}
+        onClose={() => setAddDrawerOpen(false)}
+        open={addDrawerOpen}
+      />
+    </>
   );
 };
 

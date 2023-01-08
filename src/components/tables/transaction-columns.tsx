@@ -24,6 +24,11 @@ export interface TransactionColumn {
 export interface GetTransactionColumnsParams {
   form: FormInstance;
   editingKey: TransactionColumn["id"];
+  renderDate: (
+    value: TransactionColumn["date"],
+    record: TransactionColumn,
+    index: number,
+  ) => React.ReactNode;
   renderAction: (
     value: undefined,
     record: TransactionColumn,
@@ -41,6 +46,7 @@ export type TransactionColumnsType = (
 export const getTransactionColumns = ({
   form,
   renderAction,
+  renderDate,
 }: GetTransactionColumnsParams): TransactionColumnsType => {
   return [
     {
@@ -71,6 +77,7 @@ export const getTransactionColumns = ({
         );
       },
       sorter: (a, b) => dateSortComparison(new Date(a.date), new Date(b.date)),
+      render: renderDate,
     },
     {
       title: "Account",
