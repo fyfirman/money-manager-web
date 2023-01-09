@@ -72,24 +72,28 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
   };
 
   const handleEditSubmit = async (values: EditTransactionForm) => {
-    await updateMutation.mutateAsync({
-      id: values.id,
-      mbDate: `${values.date.format("YYYY-MM-DD")}T00:00:00`,
-      mbCash: values.amount,
-      assetId: values.account,
-      inOutType: InOutType.Expense,
-      inOutCode: "1", // 1 for Expense
-      payType: values.account,
-      mbCategory: values.category,
-      subCategory: values.subCategory,
-      mbContent: values.content,
-      mcid: values.category,
-      mcscid: values.subCategory,
-    });
+    try {
+      await updateMutation.mutateAsync({
+        id: values.id,
+        mbDate: `${values.date.format("YYYY-MM-DD")}T00:00:00`,
+        mbCash: values.amount,
+        assetId: values.account,
+        inOutType: InOutType.Expense,
+        inOutCode: "1", // 1 for Expense
+        payType: values.account,
+        mbCategory: values.category,
+        subCategory: values.subCategory,
+        mbContent: values.content,
+        mcid: values.category,
+        mcscid: values.subCategory,
+      });
 
-    setEditingKey("");
+      setEditingKey("");
 
-    void queryClient.refetchQueries(["getTransactions"]);
+      void queryClient.refetchQueries(["getTransactions"]);
+    } catch (error: unknown) {
+      errorHandler(error);
+    }
   };
 
   const handleDeleteClick = async () => {
