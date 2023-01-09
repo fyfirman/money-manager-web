@@ -33,7 +33,7 @@ export const useTransactionStore = create<TransactionState>()(
         set(({ transactions }) => ({ transactions: [...transactions, transaction] }));
       },
       getTransactionsGroupByDate: () => {
-        const { transactions } = get().sort(
+        const transactions = get().transactions.sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
         );
         return transactions.reduce<TransactionListGroupByDate>((acc, transaction) => {
