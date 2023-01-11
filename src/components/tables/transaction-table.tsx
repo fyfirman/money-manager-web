@@ -145,7 +145,7 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
                       href="#"
                       onClick={() => handleDateClick(value)}
                     >
-                      {value}
+                      {dayjs(value).format("ddd, DD MMM YYYY")}
                     </a>
                   );
                 },
