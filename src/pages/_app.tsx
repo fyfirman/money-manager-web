@@ -10,7 +10,6 @@ import "../styles/globals.css";
 import "~/utils/dayjs";
 import "antd/dist/reset.css";
 import Navbar from "~/components/navbar";
-import Head from "next/head";
 
 const { Content, Footer } = Layout;
 
@@ -22,10 +21,6 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider theme={theme}>
-        <Head>
-          {/* Add this meta to allow use http over https */}
-          <meta content="upgrade-insecure-requests" httpEquiv="Content-Security-Policy" />
-        </Head>
         <Layout className="layout">
           <Navbar />
           <Content>
