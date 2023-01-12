@@ -50,7 +50,8 @@
     "jest-environment-jsdom": "^29.3.1",
     "postcss": "^8.4.20",
     "tailwindcss": "^3.2.4",
-    "ts-jest": "^29.0.3",
+    "@swc/core": "^1.2.205",
+    "@swc/jest": "^0.2.21",
     "ts-node": "^10.9.1"
   }
 }
