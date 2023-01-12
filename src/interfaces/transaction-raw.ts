@@ -1,5 +1,5 @@
 export interface TransactionRaw {
-  id: string;
+  id: string | number;
   mbDate: string;
   inOutCode: number;
   assetId: string | number;

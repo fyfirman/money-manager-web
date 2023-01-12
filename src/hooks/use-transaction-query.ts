@@ -15,7 +15,7 @@ export const useTransactionQuery = () =>
         .getDataByPeriod(previousDate.format("YYYY-MM-DD"), dayjs().format("YYYY-MM-DD"))
         .then((raw): TransactionColumn[] =>
           raw.map((t) => ({
-            id: t.id,
+            id: String(t.id),
             date: t.mbDate,
             account: t.payType,
             category: t.mbCategory,
