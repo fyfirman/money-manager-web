@@ -40,10 +40,9 @@ export type TransactionColumnsType = (
   | ColumnType<TransactionColumn> & {
       editable?: boolean;
       renderEditInput?: (record: TransactionColumn) => React.ReactNode;
+      subHeaderColSpan?: number;
     }
 )[];
-
-const numberOfCols = 10;
 
 export const getTransactionColumns = ({
   form,
@@ -56,6 +55,7 @@ export const getTransactionColumns = ({
       dataIndex: "date",
       key: "date",
       editable: true,
+      subHeaderColSpan: 5,
       renderEditInput(record) {
         return (
           <>
@@ -185,6 +185,7 @@ export const getTransactionColumns = ({
       key: "amount",
       sorter: (a, b) => b.amount - a.amount,
       editable: true,
+      subHeaderColSpan: 1,
       renderEditInput(record) {
         return (
           <Form.Item
@@ -196,7 +197,12 @@ export const getTransactionColumns = ({
           </Form.Item>
         );
       },
-      render(value) {
+      render(value, record) {
+        if (record.id.search("subheader") !== -1) {
+          return (
+            <span className="text-red-600">{currencyFormatter(value as number)}</span>
+          );
+        }
         return currencyFormatter(value as number);
       },
     },
@@ -217,13 +223,13 @@ export const getTransactionColumns = ({
 export const getEditableTransactionColumns = (params: GetTransactionColumnsParams) => {
   const columns = getTransactionColumns(params);
 
-  return columns.map((col, index) => {
+  return columns.map((col) => {
     const { renderEditInput = () => {} } = col;
 
     const getColSpan = (id: TransactionColumn["id"]) => {
       const isSubHeader = id.search("subheader") !== -1;
-      if (index === 0 && isSubHeader) {
-        return numberOfCols;
+      if (col.subHeaderColSpan && isSubHeader) {
+        return col.subHeaderColSpan;
       }
 
       if (isSubHeader) {
@@ -260,10 +266,13 @@ export const injectSubHeader = (dataSource?: readonly TransactionColumn[]) => {
   }
 
   const result: TransactionColumn[] = [];
+  const idToTotalAmount: Record<string, { index: number; amount: number }> = {};
   dataSource.forEach((t) => {
+    const id = `subheader-${t.date}`;
     if (result.length === 0 || result[result.length - 1].date !== t.date) {
+      Object.assign(idToTotalAmount, { [id]: { index: result.length, amount: 0 } });
       result.push({
-        id: `subheader-${t.date}`,
+        id,
         date: t.date,
         account: "",
         category: "",
@@ -273,7 +282,11 @@ export const injectSubHeader = (dataSource?: readonly TransactionColumn[]) => {
         type: "",
       });
     }
+    idToTotalAmount[id].amount += t.amount;
     result.push(t);
+  });
+  Object.keys(idToTotalAmount).forEach((id) => {
+    result[idToTotalAmount[id].index].amount = idToTotalAmount[id].amount;
   });
   return result;
 };

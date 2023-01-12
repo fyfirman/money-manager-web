@@ -20,7 +20,7 @@ import {
   injectSubHeader,
 } from "./transaction-columns";
 import TransactionTableAction from "./transaction-table-action";
-import TransactionSubheader from "./transaction-subheader";
+import TransactionSubheader from "./transaction-subheader-date";
 
 interface EditTransactionForm {
   id: string;
