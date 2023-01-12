@@ -185,7 +185,7 @@ export const getTransactionColumns = ({
       key: "amount",
       sorter: (a, b) => b.amount - a.amount,
       editable: true,
-      subHeaderColSpan: 1,
+      subHeaderColSpan: 3,
       renderEditInput(record) {
         return (
           <Form.Item
