@@ -33,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = () => {
   };
 
   return (
-    <Header className="!bg-white shadow-md flex justify-between items-center">
+    <Header className="!bg-white shadow-md flex justify-between items-center relative">
       <span />
       <img alt="logo" src={Logo.src} />
       <div className="max-h-[64px] flex gap-1">
@@ -49,6 +49,19 @@ const Navbar: React.FC<NavbarProps> = () => {
           Refresh
         </Button>
       </div>
+      {env.enableMock ? (
+        <div
+          className="absolute top-[-10px] right-[-20px]"
+          style={{ transform: "rotate(45deg)" }}
+        >
+          <span
+            className="bg-yellow-300 px-6 py-0.5 text-white text-sm font-semibold shadow-sm shadow-gray-300"
+            style={{ textShadow: "0 1px 1px rgba(0,0,0,.1)" }}
+          >
+            Mock
+          </span>
+        </div>
+      ) : null}
     </Header>
   );
 };
