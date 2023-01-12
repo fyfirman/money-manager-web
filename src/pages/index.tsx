@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Switch } from "antd";
 import { useState } from "react";
 import AddTransactionDrawer from "~/components/add-transaction-drawer";
 import TransactionTable from "~/components/tables/transaction-table";
@@ -11,6 +11,7 @@ export default function Home() {
   const { data, isLoading } = useTransactionQuery();
 
   const [open, setOpen] = useState(false);
+  const [showSubHeader, setShowSubHeader] = useState(false);
 
   const showDrawer = () => {
     setOpen(true);
@@ -18,6 +19,10 @@ export default function Home() {
 
   const onClose = () => {
     setOpen(false);
+  };
+
+  const handleSwitchChange = (checked: boolean) => {
+    setShowSubHeader(checked);
   };
 
   return (
@@ -31,10 +36,23 @@ export default function Home() {
             </Button>
           </div>
         </div>
-        <div>
+        <div className="flex flex-row w-full justify-between">
+          <div className="flex flex-row justify-between min-w-[20%]">
+            <span>Show Sub Header</span>
+            <Switch
+              checked={showSubHeader}
+              checkedChildren="On"
+              onChange={handleSwitchChange}
+              unCheckedChildren="Off"
+            />
+          </div>
           <p>Total data: {data?.length ?? 0}</p>
         </div>
-        <TransactionTable dataSource={data} loading={isLoading} />
+        <TransactionTable
+          dataSource={data}
+          loading={isLoading}
+          showSubHeader={showSubHeader}
+        />
       </div>
       <AddTransactionDrawer onClose={onClose} open={open} />
     </>

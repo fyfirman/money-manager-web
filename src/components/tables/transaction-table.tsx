@@ -20,6 +20,7 @@ import {
   injectSubHeader,
 } from "./transaction-columns";
 import TransactionTableAction from "./transaction-table-action";
+import TransactionSubheader from "./transaction-subheader";
 
 interface EditTransactionForm {
   id: string;
@@ -31,8 +32,13 @@ interface EditTransactionForm {
   amount: number;
 }
 
-const TransactionTable: React.FC<TableProps<TransactionColumn>> = ({
+interface TransactionTableProps extends TableProps<TransactionColumn> {
+  showSubHeader?: boolean;
+}
+
+const TransactionTable: React.FC<TransactionTableProps> = ({
   dataSource,
+  showSubHeader,
   ...rest
 }) => {
   const [selectedRows, setSelectedRows] = useState<Transaction["id"][]>([]);
@@ -126,7 +132,10 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = ({
   const columns = getEditableTransactionColumns({
     form,
     editingKey,
-    renderDate(value) {
+    renderDate(value, record) {
+      if (record.id.search("subheader") !== -1) {
+        return <TransactionSubheader date={dayjs(record.date)} />;
+      }
       return (
         <a className="text-blue-600" href="#" onClick={() => handleDateClick(value)}>
           {dayjs(value).format("ddd, DD MMM YYYY")}
@@ -171,7 +180,7 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = ({
                 cell: EditableCell,
               },
             }}
-            dataSource={injectSubHeader(dataSource).slice(0, 10)}
+            dataSource={showSubHeader ? injectSubHeader(dataSource) : dataSource}
             rowKey="id"
             rowSelection={rowSelection}
             {...rest}
