@@ -14,7 +14,11 @@ import dayjs from "dayjs";
 import { InOutType } from "~/services/global-service.schema";
 import EditableCell from "../editable-cell";
 import AddTransactionDrawer from "../add-transaction-drawer";
-import { TransactionColumn, getEditableTransactionColumns } from "./transaction-columns";
+import {
+  TransactionColumn,
+  getEditableTransactionColumns,
+  injectSubHeader,
+} from "./transaction-columns";
 import TransactionTableAction from "./transaction-table-action";
 
 interface EditTransactionForm {
@@ -27,7 +31,10 @@ interface EditTransactionForm {
   amount: number;
 }
 
-const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
+const TransactionTable: React.FC<TableProps<TransactionColumn>> = ({
+  dataSource,
+  ...rest
+}) => {
   const [selectedRows, setSelectedRows] = useState<Transaction["id"][]>([]);
   const [editingKey, setEditingKey] = useState<Transaction["id"]>("");
   const [addDrawerOpen, setAddDrawerOpen] = useState(false);
@@ -116,6 +123,30 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
     setAddDrawerOpen(true);
   };
 
+  const columns = getEditableTransactionColumns({
+    form,
+    editingKey,
+    renderDate(value) {
+      return (
+        <a className="text-blue-600" href="#" onClick={() => handleDateClick(value)}>
+          {dayjs(value).format("ddd, DD MMM YYYY")}
+        </a>
+      );
+    },
+    renderAction(value, record) {
+      return (
+        <TransactionTableAction
+          editingKey={editingKey}
+          isLoading={updateMutation.isLoading}
+          onCancel={handleEditCancel}
+          onEdit={handleEditClick}
+          onSave={form.submit}
+          record={record}
+        />
+      );
+    },
+  }) as ColumnsType<TransactionColumn>;
+
   return (
     <>
       <div>
@@ -134,43 +165,16 @@ const TransactionTable: React.FC<TableProps<TransactionColumn>> = (props) => {
         </div>
         <Form component={false} form={form} onFinish={handleEditSubmit}>
           <Table<TransactionColumn>
-            columns={
-              getEditableTransactionColumns({
-                form,
-                editingKey,
-                renderDate(value) {
-                  return (
-                    <a
-                      className="text-blue-600"
-                      href="#"
-                      onClick={() => handleDateClick(value)}
-                    >
-                      {dayjs(value).format("ddd, DD MMM YYYY")}
-                    </a>
-                  );
-                },
-                renderAction(value, record) {
-                  return (
-                    <TransactionTableAction
-                      editingKey={editingKey}
-                      isLoading={updateMutation.isLoading}
-                      onCancel={handleEditCancel}
-                      onEdit={handleEditClick}
-                      onSave={form.submit}
-                      record={record}
-                    />
-                  );
-                },
-              }) as ColumnsType<TransactionColumn>
-            }
+            columns={columns}
             components={{
               body: {
                 cell: EditableCell,
               },
             }}
+            dataSource={injectSubHeader(dataSource).slice(0, 10)}
             rowKey="id"
             rowSelection={rowSelection}
-            {...props}
+            {...rest}
           />
         </Form>
       </div>

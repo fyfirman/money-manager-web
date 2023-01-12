@@ -43,6 +43,8 @@ export type TransactionColumnsType = (
     }
 )[];
 
+const numberOfCols = 10;
+
 export const getTransactionColumns = ({
   form,
   renderAction,
@@ -215,14 +217,34 @@ export const getTransactionColumns = ({
 export const getEditableTransactionColumns = (params: GetTransactionColumnsParams) => {
   const columns = getTransactionColumns(params);
 
-  return columns.map((col) => {
+  return columns.map((col, index) => {
     const { renderEditInput = () => {} } = col;
+
+    const getColSpan = (id: TransactionColumn["id"]) => {
+      const isSubHeader = id.search("subheader") !== -1;
+      if (index === 0 && isSubHeader) {
+        return numberOfCols;
+      }
+
+      if (isSubHeader) {
+        return 0;
+      }
+
+      return 1;
+    };
+
     if (!col.editable) {
-      return col;
+      return {
+        ...col,
+        onCell: (record: TransactionColumn) => ({
+          colSpan: getColSpan(record.id),
+        }),
+      };
     }
     return {
       ...col,
       onCell: (record: TransactionColumn) => ({
+        colSpan: getColSpan(record.id),
         record,
         dataIndex: col.dataIndex as keyof TransactionColumn,
         editing: params.editingKey === record.id,
@@ -230,4 +252,28 @@ export const getEditableTransactionColumns = (params: GetTransactionColumnsParam
       }),
     };
   });
+};
+
+export const injectSubHeader = (dataSource?: readonly TransactionColumn[]) => {
+  if (!dataSource) {
+    return [];
+  }
+
+  const result: TransactionColumn[] = [];
+  dataSource.forEach((t) => {
+    if (result.length === 0 || result[result.length - 1].date !== t.date) {
+      result.push({
+        id: `subheader-${t.date}`,
+        date: t.date,
+        account: "",
+        category: "",
+        subCategory: "",
+        content: "",
+        amount: 0,
+        type: "",
+      });
+    }
+    result.push(t);
+  });
+  return result;
 };
